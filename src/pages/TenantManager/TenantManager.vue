@@ -8,9 +8,29 @@
         :columnMeta="columnMeta"
         :extendBtns="extendBtns"
         @on-extend-one="handleExtendOne"
-        @on-extend-two="handleExtendTwo"
-        >
+        @on-extend-two="handleExtendTwo">
       </AdminTable>  
+    </template>
+    <template #extend>
+      <Modal
+          title="获取license"
+          v-model="licenseModal"
+          @on-ok="handleLicense">
+          <Form ref="formLicense" :model="formLicense" :label-width="120">
+            <FormItem label="MAC地址">
+              <Input v-model="formLicense.macAddress" placeholder="请输入mac地址"/>
+            </FormItem>
+            <FormItem label="License" prop="license">
+              <Input v-model="formLicense.license" type="textarea" :autosize="{minRows: 8,maxRows: 8}" placeholder="license信息" />
+            </FormItem>
+            <FormItem>
+              <Button @click="handleLicense()" style="margin-left: 8px">提交</Button>
+            </FormItem>
+          </Form>
+          <template #footer>
+              <div></div>
+          </template>
+      </Modal>
     </template>
   </AdminLayout>
 
@@ -24,7 +44,7 @@
 import AdminTable from '@/components/AdminTable';
 import AdminLayout from '@/components/AdminLayout';
 import Meta from './meta.json';
-import {reset,responseHandle,initParam} from './data'
+import {reset,responseHandle,license} from './data'
 
 console.log(Meta)
 export default {
@@ -32,34 +52,6 @@ export default {
   components: {
     AdminTable,
     AdminLayout,
-  },
-  methods:{
-    handleExtendOne(params){
-      //重置
-      console.log(params)
-      reset({
-        requestParams:initParam(params.row,this),
-        requestUrl:"/tenant/reset"
-      }).then(res=>{
-        responseHandle(res,this.$Message);
-      }).catch(err=>{
-        console.log(err)
-        this.$Message.error('重置密钥异常,请核对');
-      })
-    },
-    handleExtendTwo(params){
-      //license
-      console.log(params)
-      reset({
-        requestParams:initParam(params.row,this),
-        requestUrl:"/tenant/reset"
-      }).then(res=>{
-        responseHandle(res,this.$Message);
-      }).catch(err=>{
-        console.log(err)
-        this.$Message.error('获取license异常,请核对');
-      })
-    }
   },
   data: function() {
     const tableMeta=Meta.AdminTable;
@@ -86,7 +78,47 @@ export default {
         message:'确定要获取license吗？'
       }],
       menuUrl:layoutMeta.menu,
+      formLicense:{
+        license:""
+      },
+      licenseModal:false
     };
   },
+  methods:{
+    handleExtendOne(params){
+      //重置
+      console.log(params)
+      reset({
+        requestParams:params.row,
+        requestUrl:"/tenant/reset"
+      }).then(res=>{
+        responseHandle(res,this.$Message);
+        this.$Message.info('重置密钥成功')
+      }).catch(err=>{
+        console.log(err)
+        this.$Message.error('重置密钥异常,请核对');
+      })
+    },
+    handleExtendTwo(params){
+      //license
+      this.licenseModal=true
+    },
+    handleLicense(){
+      license({
+        requestParams:this.formLicense,
+        requestUrl:"/tenant/license"
+      }).then(res=>{
+        const obj=this;
+        responseHandle(res,this.$Message,function(response){
+          console.log(response);
+          obj.formLicense.license=response.license;
+        });
+        //this.$Message.info('获取license成功')
+      }).catch(err=>{
+        console.log(err)
+        this.$Message.error('获取license异常,请核对');
+      })
+    }
+  }
 };
 </script>

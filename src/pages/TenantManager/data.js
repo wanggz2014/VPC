@@ -2,9 +2,24 @@ import axios from '@/libs/api.request'
 import Qs from 'qs'
 import Cookies from 'js-cookie';
 
+const setToken=(params)=>{
+  params.token= Cookies.get('token')
+}
 
 export const reset = ({requestParams,requestUrl}) => {
   console.log(requestUrl)
+  setToken(requestParams)
+  console.log(requestParams)
+  return axios.request({
+    url: requestUrl,
+    method: 'post',
+    data:Qs.stringify(requestParams)
+  })
+}
+
+export const license=({requestParams,requestUrl}) => {
+  console.log(requestUrl)
+  setToken(requestParams)
   console.log(requestParams)
   return axios.request({
     url: requestUrl,
@@ -31,11 +46,7 @@ export const responseHandle=(res,message,handle)=>{
   return true;
 }
 
-export const initParam=(params,data)=>{
-  const currrentParam=params==undefined?{}:params;
-  currrentParam.token= data.token==undefined?Cookies.get('token'):data.token
-  return currrentParam
-}
+
 
 
 

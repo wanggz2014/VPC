@@ -1,7 +1,7 @@
 {
   "AdminTable":{
       "columns":[
-        { "title": "Id", "key": "id", "editable": true ,"searchable":false},
+        { "title": "Id", "key": "id", "editable": true ,"searchable":false, "maxWidth":50},
         { "title": "租户名称", "key": "tenantName", "editable": true ,"searchable":true},
         { "title": "授权KEY", "key": "apiKey", "editable": false ,"searchable":false},
         { "title": "过期时间", "key": "expireTime", "editable": true ,"searchable":false},
@@ -31,8 +31,7 @@
         "search":"/tenant/list",
         "edit":"/tenant/edit",
         "add":"/tenant/submit"
-      },
-      "local":false
+      }
   },
   "AdminLayout":{
     "menu":"http://localhost:8099/auth/admin/base/menus"

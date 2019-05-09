@@ -55,12 +55,15 @@
               <slot></slot>
             </Content>
           </Layout>
+          <slot name="extend"></slot>
         </Content>
       </Layout>
-      <!-- footer -->
-      <Footer class="layout-footer-center">
-        2011-2016 &copy; TalkingData
-      </Footer>
+      <slot name="footer">
+        <!-- footer -->
+        <Footer class="layout-footer-center">
+          2011-2016 &copy; TalkingData
+        </Footer>
+      </slot>
     </Layout>
   </div>
 </template>

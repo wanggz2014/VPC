@@ -3,14 +3,20 @@
         title="新增"
         :value="formAdd"
         :loading="loading"
-        @on-ok="handleAdd"
         @on-visible-change="handleChange" >
       <Form ref="addForm" :model="addForm" :rules="ruleValidate" :label-width="120">
           <FormItem  v-for="item in formItems" v-bind:key="item.prop" :label="item.label" :prop="item.prop">
             <Input v-if="item.type=='input'" v-model="addForm[item.prop]" :placeholder="item.placeholder"/>
             <DatePicker v-if="item.type=='date'" :placeholder="item.placeholder" v-model="addForm[item.prop]"></DatePicker>
           </FormItem>
-      </Form>  
+          <FormItem>
+            <Button type="primary" @click="handleAdd()">提交</Button>
+            <Button @click="handleReset()" style="margin-left: 8px">重置</Button>
+          </FormItem>
+      </Form>
+      <template #footer>
+          <div></div>
+      </template>
   </Modal>
 </template>
 
@@ -69,6 +75,7 @@ export default {
             entry.handleChange(false);
             entry.$emit('on-modal-success');
           })
+          this.$Message.info('新增记录成功')
         }).catch(err=>{
           console.log(err)
           errorMessage(entry,'新增存储异常,请核对')
@@ -80,10 +87,13 @@ export default {
       this.loading=true;
       if(!params){
         if(!this.error){
-          this.$refs.addForm.resetFields();
+          this.handleReset();
         }
         this.$emit('on-modal-close', params)
       }
+    },
+    handleReset(){
+      this.$refs.addForm.resetFields();
     }
   }
 }

@@ -92,7 +92,7 @@ export const getMenuDetail=(menuData) =>{
 
 export const toUrl=(activeMenu,menuData) =>{
   const url=getMenu(activeMenu,menuData).url;
-  window.location.href='./'+url;
+  window.location.href=url;
 }
 
 export const responseHandle=(res,message,handle)=>{

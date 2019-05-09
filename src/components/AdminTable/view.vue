@@ -98,6 +98,7 @@ export default {
         requestUrl:this.deleteUrl
       }).then(res=>{
         responseHandle(res,this.$Message);
+        this.$Message.info('删除记录成功')
       }).catch(err=>{
         console.log(err)
         this.$Message.error('删除记录异常,请核对');
@@ -111,6 +112,7 @@ export default {
         requestUrl:this.editUrl
       }).then(res=>{
         responseHandle(res,this.$Message);
+        this.$Message.info('修改记录成功')
       }).catch(err=>{
         console.log(err)
         this.$Message.error('修改记录异常,请核对');
@@ -142,6 +144,7 @@ export default {
             obj.pageInfo.current=parseInt(response.number)+1
           }
         });
+        //this.$Message.info('获取记录成功')
       }).catch(err=>{
         console.log(err)
         this.$Message.error('获取记录异常,请核对');
