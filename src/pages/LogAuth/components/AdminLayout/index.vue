@@ -15,7 +15,7 @@
       </Header>
       <Layout :style="{ padding: '0 50px' }">
         <Breadcrumb :style="{ margin: '16px 0' }">
-          <BreadcrumbItem v-for="crumb in breadcrumb" v-bind:key="crumb">
+          <BreadcrumbItem v-for="crumb in currentInfo.breadcrumb" v-bind:key="crumb">
             {{crumb}}
           </BreadcrumbItem>
         </Breadcrumb>
@@ -26,10 +26,10 @@
             <!-- sider -->
             <Sider hide-trigger :style="{ background: '#fff' }">
               <Menu
-                :active-name="active"
+                :active-name="currentInfo.active"
                 theme="light"
                 width="auto"
-                :open-names="open"
+                :open-names="currentInfo.open"
                 @on-select="turnToPage" 
                 v-for="sub in menuData" 
                 v-if="sub.show"
@@ -68,11 +68,9 @@
 <script>
 import {getMenuData,getMenuDetail,toUrl,responseHandle} from './libs/menu'
 import Vue from 'vue';
-import Vue2Storage from 'vue2-storage';
 import { mapActions } from 'vuex';
-Vue.use(Vue2Storage)
+import Cookies from 'js-cookie'
 
-const DEFAULT_MENU_ITEM="tenant-manager";
 const DEFAULT_MENU_DATA=[{
     "subMenu":"tenant",
     "subTitle":"租户管理",
@@ -138,17 +136,16 @@ export default {
       }
     },
     menuUrl:String,
-    defaultMenuItem:{
-      type:String,
-      default:DEFAULT_MENU_ITEM
-    }
+    token:String
   },
   data: function(){
     return {
       menuData:[],
-      active:'',
-      open:'',
-      breadcrumb:'',
+      currentInfo:{
+        active:'',
+        open:'',
+        breadcrumb:''
+      },
       display:false
     }
   },
@@ -157,7 +154,7 @@ export default {
       'handleLogOut',
     ]),
     turnToPage (active) {
-      toUrl(active,this.defaultMenuItem,this.$storage)
+      toUrl(active,this.menuData)
     },
     turnToLogout(active){
       if(this.$store!=undefined){
@@ -173,22 +170,19 @@ export default {
     }
   },
   created:function(){
+    console.log(Cookies.get('token'))
     getMenuData({
         menuData:this.initMenuData,
-        menuUrl:this.menuUrl
+        menuUrl:this.menuUrl,
+        token: this.token==undefined?Cookies.get('token'):this.token
     }).then(res=>{
       const obj=this;
       responseHandle(res,this.$Message,function(menuData){
         //列表信息
-        obj.$storage.set('menuData',menuData, { ttl: 60 * 1000*60 });
         obj.menuData=menuData;
-
         //导航详情
-        //console.log(obj.defaultMenuItem)
-        const menuDetail=getMenuDetail(obj.$storage,obj.defaultMenuItem);
-        obj.active=menuDetail.active;
-        obj.open=menuDetail.open;
-        obj.breadcrumb=menuDetail.breadcrumb;
+        obj.currentInfo=getMenuDetail(menuData);
+        //console.log(obj.currentInfo)
         obj.display=true;
       })
     })

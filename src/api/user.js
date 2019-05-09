@@ -7,7 +7,7 @@ export const login = ({ userName, password}) => {
     password
   }
   return axios.request({
-    url: 'login',
+    url: 'base/login',
     data:Qs.stringify(data),
     method: 'post'
   })
@@ -15,7 +15,7 @@ export const login = ({ userName, password}) => {
 
 export const getUserInfo = (token) => {
   return axios.request({
-    url: 'userInfo',
+    url: 'base/userinfo',
     data:Qs.stringify({
       token
     }),
@@ -25,7 +25,7 @@ export const getUserInfo = (token) => {
 
 export const logout = (token) => {
   return axios.request({
-    url: 'logout',
+    url: 'base/logout',
     data:Qs.stringify({
       token
     }),

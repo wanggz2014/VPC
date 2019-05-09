@@ -2,13 +2,14 @@
   <div v-if="display">
     <AddForm :formAdd="formAdd" 
               :submitUrl="addConfig.submitUrl"
-              :metaUrl="addConfig.metaUrl" 
+              :formMeta="addConfig.formMeta" 
         v-if="addConfig.enable"
         @on-modal-close="formAdd=false" 
         @on-modal-success="handleSearch" />
     <Card>
       <tables ref="tables" editable searchable :addable="addConfig.enable" search-place="top" v-model="tableData" 
-          :columns="columns" 
+          :columns="columnMeta" 
+          :height="height"
           @on-search="handleSearch" 
           @on-save-edit="handleEdit" 
           @on-delete="handleDelete"
@@ -16,7 +17,13 @@
           @on-extend-one="handleExtendOne"
           @on-extend-two="handleExtendTwo"
           />
-      <Page class="tp-table-page" :total="pageInfo.total" :page-size="pageInfo.pageSize" :current="pageInfo.current" show-sizer v-if="page" />
+      <Page class="tp-table-page"
+         :total="pageInfo.total" 
+         :page-size="pageInfo.pageSize" 
+         :current="pageInfo.current"
+         @on-change="handlePageChange"
+         @on-page-size-change="handlePageSizeChange" 
+         show-sizer v-if="pageInfo.page" />
     </Card>
   </div>
 </template>
@@ -25,7 +32,8 @@
 import Tables from './tables.vue';
 import AddForm from './add.vue';
 import HandleBtns from './handle-btns.js';
-import { getTableData,delTableData,editTableData,getTableMeta,initParam,responseHandle} from './libs/data'
+import mock from './mock.json';
+import { getTableData,delTableData,editTableData,responseHandle} from './libs/data'
 
 export default {
   name: 'tables_page',
@@ -39,7 +47,7 @@ export default {
         return {
           enable:false,
           submitUrl:'',
-          metaUrl:''
+          formMeta:{"items":[],"rules":{}}
         }
       }
     },
@@ -49,15 +57,20 @@ export default {
         return []
       }
     },
-    metaUrl:String,
-    token:String,
-    local:{
-      type:Boolean,
-      default:false
+    columnMeta:{
+      type:Array,
+      default(){
+        return mock.columns
+      }
     },
+    token:String,
     page:{
       type:Boolean,
       default:true
+    },
+    height:{
+      type:Number,
+      default:400
     }
   },
   components: {
@@ -66,23 +79,23 @@ export default {
   },
   data () {
     return {
-      columns: [],
       tableData: [],
       pageInfo:{
         total:0,
-        pageSize:10,
-        current:1
+        pageSize:7,
+        current:1,
+        params:null,
+        page:this.page
       },
       formAdd:false,
-      display:false
+      display:true
     }
   },
   methods: {
     handleDelete (params) {
       delTableData({
-        requestParams:initParam(params.row,this),
-        requestUrl:this.deleteUrl,
-        local:this.local
+        requestParams:params,
+        requestUrl:this.deleteUrl
       }).then(res=>{
         responseHandle(res,this.$Message);
       }).catch(err=>{
@@ -94,9 +107,8 @@ export default {
       console.log(params);
       params.row[params.column.key]=params.value
       editTableData({
-        requestParams:initParam(params.row,this),
-        requestUrl:this.editUrl,
-        local:this.local
+        requestParams:params.row,
+        requestUrl:this.editUrl
       }).then(res=>{
         responseHandle(res,this.$Message);
       }).catch(err=>{
@@ -105,22 +117,28 @@ export default {
       })
     },
     handleSearch(params){
-      const currrentParam=params=initParam(params,this);
-      if(this.page){
-        currrentParam.pageNo=this.pageInfo.current-1;
-        currrentParam.pageSize=this.pageInfo.pageSize;
+      if(this.searchUrl==undefined){
+        return this.tableData=[];
+      }
+
+      if(params==undefined){
+        params={};
+      }
+
+      if(this.pageInfo.page){
+        this.pageInfo.params=params;
+        params.pageNo=this.pageInfo.current;
+        params.pageSize=this.pageInfo.pageSize;
       }
       getTableData({
-        requestParams:currrentParam,
-        requestUrl:this.searchUrl,
-        local:this.local
+        requestParams:params,
+        requestUrl:this.searchUrl
       }).then(res => {
         const obj=this;
         responseHandle(res,this.$Message,function(response){
           obj.tableData=response.content
-          if(obj.page){
+          if(obj.pageInfo.page){
             obj.pageInfo.total=parseInt(response.totalElements)
-            obj.pageInfo.pageSize=parseInt(response.size)
             obj.pageInfo.current=parseInt(response.number)+1
           }
         });
@@ -137,47 +155,43 @@ export default {
       //console.log(params);
       this.$emit('on-extend-two', params)
     },
-    searchMeta(params){
-      const currrentParam=params=initParam(params,this);
-      getTableMeta({
-        requestParams:currrentParam,
-        requestUrl:this.metaUrl,
-        local:this.local
-      }).then(res => {
-        const obj=this;
-        responseHandle(res,this.$Message,function(currentColumns){
-          const buttons=[];
-          if(obj.deleteUrl!=undefined){
-            buttons.push(HandleBtns.delete)
-          }
+    handlePageChange(params){
+      console.log('paras:'+params);
+      this.pageInfo.current=params;
+      this.handleSearch(this.pageInfo.params);
+    },
+    handlePageSizeChange(params){
+      console.log('paras:'+params);
+      this.pageInfo.pageSize=params;
+      this.handleSearch(this.pageInfo.params);
+    },
+    initMeta(){
+      const buttons=[];
+      if(this.deleteUrl!=undefined){
+        buttons.push(HandleBtns.delete)
+      }
 
-          console.log(obj.extendBtns);
-          for(let i in obj.extendBtns){
-            const extend=obj.extendBtns[i];
-            buttons.push(HandleBtns[extend.name](extend.icon,extend.title,extend.message))
-          }
+      console.log(this.extendBtns);
+      for(let i in this.extendBtns){
+        const extend=this.extendBtns[i];
+        buttons.push(HandleBtns[extend.name](extend.icon,extend.title,extend.message))
+      }
 
-          if(buttons.length>0){
-            currentColumns.push({
-              title: '操作',
-              key: 'handle',
-              button:buttons
-            })
-          }
-          console.log(currentColumns)
-          obj.columns=currentColumns
-        });
-      }).catch(err=>{
-        console.log(err)
-        this.$Message.error('获取列表信息失败,请核对');
-      })
+      if(buttons.length>0){
+        this.columnMeta.push({
+          title: '操作',
+          key: 'handle',
+          button:buttons
+        })
+      }
+      console.log(this.columnMeta)
     }
   },
   created () {
     //获取元信息
-    this.searchMeta();
+    this.initMeta();
     this.handleSearch();
-    this.display=true;
+
   }
 }
 </script>

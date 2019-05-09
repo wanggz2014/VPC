@@ -44,30 +44,15 @@ const dataCheck=(data)=>{
   return data;
 }
 
+const setToken=(params)=>{
+  params.token= Cookies.get('token')
+}
 
-export const getTableData = ({requestParams,requestUrl,local}) => {
+
+export const getTableData = ({requestParams,requestUrl}) => {
   console.log(requestUrl)
+  setToken(requestParams)
   console.log(requestParams)
-  console.log(local)
-  if(local){
-    return new Promise(function (resolve) {
-      const result={
-        status:200,
-        data:{
-          success:true,
-          message:'',
-          details:[
-            {
-              name:'test',
-              email:'wgz@163.com',
-              createTime:'2019-12-01'
-            }
-          ]
-        }
-      }
-      resolve(result);
-    }); 
-  }
   return axios.request({
     url: requestUrl,
     method: 'post',
@@ -78,6 +63,7 @@ export const getTableData = ({requestParams,requestUrl,local}) => {
 
 export const addTableData = ({requestParams,requestUrl}) => {
   console.log(requestUrl)
+  setToken(requestParams)
   requestParams=dataCheck(requestParams);
   console.log(requestParams)
   return axios.request({
@@ -88,17 +74,10 @@ export const addTableData = ({requestParams,requestUrl}) => {
 }
 
 
-export const delTableData = ({requestParams,requestUrl,local}) => {
+export const delTableData = ({requestParams,requestUrl}) => {
   console.log(requestUrl)
+  setToken(requestParams)
   console.log(requestParams)
-  if(local){
-    return new Promise(function (resolve) {
-      const result={
-        success:true
-      }
-      resolve(result);
-    }); 
-  }
   return axios.request({
     url: requestUrl,
     method: 'post',
@@ -107,54 +86,12 @@ export const delTableData = ({requestParams,requestUrl,local}) => {
 }
 
 
-export const editTableData = ({requestParams,requestUrl,local}) => {
+export const editTableData = ({requestParams,requestUrl}) => {
   console.log(requestUrl)
+  setToken(requestParams)
   requestParams=dataCheck(requestParams);
   console.log(requestParams)
-  if(local){
-    return new Promise(function (resolve) {
-      const result={
-        success:true
-      }
-      resolve(result);
-    }); 
-  }
-  return axios.request({
-    url: requestUrl,
-    method: 'post',
-    data:Qs.stringify(requestParams)
-  })
-}
-
-export const getTableMeta = ({requestParams,requestUrl,local}) => {
-  console.log(requestUrl)
-  console.log(requestParams)
-  if(local){
-    return new Promise(function (resolve, reject) {
-      const result={
-        status:200,
-        data:{
-          success:true,
-          message:'',
-          details:[
-            { title: 'Email', key: 'email', editable: true },
-            { title: 'Name', key: 'name', editable: true },
-            { title: 'Create-Time', key: 'createTime' }
-          ]
-        }
-      }
-      resolve(result);
-    }); 
-  }
-  return axios.request({
-    url: requestUrl,
-    method: 'post',
-    data:Qs.stringify(requestParams)
-  })
-}
-
-export const getFormMeta = ({requestUrl,requestParams}) => {
-  console.log(requestUrl)
+  
   return axios.request({
     url: requestUrl,
     method: 'post',
@@ -178,12 +115,6 @@ export const responseHandle=(res,message,handle)=>{
     return handle(response.data);
   }
   return true;
-}
-
-export const initParam=(params,data)=>{
-  const currrentParam=params==undefined?{}:params;
-  currrentParam.token= data.token==undefined?Cookies.get('token'):data.token
-  return currrentParam
 }
 
 
