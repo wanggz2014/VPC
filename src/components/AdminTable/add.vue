@@ -71,11 +71,11 @@ export default {
           requestParams:this.addForm,
           requestUrl:this.submitUrl
         }).then(res => {
-          responseHandle(res,entry.$Message,function(){
+          responseHandle(res,entry.$Message,function(response){
             entry.handleChange(false);
-            entry.$emit('on-modal-success');
+            entry.$emit('on-modal-success',response);
           })
-          this.$Message.info('新增记录成功')
+          //this.$Message.info('新增记录成功')
         }).catch(err=>{
           console.log(err)
           errorMessage(entry,'新增存储异常,请核对')

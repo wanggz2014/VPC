@@ -52,10 +52,12 @@
 
 <script>
 import TablesEdit from './edit.vue'
+import TableExpandLabel from './expand-label.vue'
 import handleBtns from './handle-btns'
 import './index.less'
 export default {
   name: 'Tables',
+  components: { TableExpandLabel },
   props: {
     value: {
       type: Array,
@@ -202,11 +204,23 @@ export default {
       }
       return item
     },
+    supportExpand (item,index) {
+      item.render=(h, params) => {
+        const temp=item.expandType=='label'?TableExpandLabel:null;
+        return h(temp, {
+            props: {
+                details: params.row[item.key]
+            }
+        })
+      }
+      return item
+    },
     handleColumns (columns) {
       this.insideColumns = columns.map((item, index) => {
         let res = item
         if (res.editable) res = this.suportEdit(res, index)
         if (res.key === 'handle') res = this.surportHandle(res)
+        if (res.type!=undefined&&res.type=='expand') res=this.supportExpand(res,index)
         return res
       })
     },

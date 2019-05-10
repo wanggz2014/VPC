@@ -9,23 +9,12 @@
         :columnMeta="columnMeta"
         :extendBtns="extendBtns"
         @on-extend-one="handleExtendOne"
-        @on-extend-two="handleExtendTwo">
+        @on-extend-two="handleExtendTwo"
+        @on-modal-success="handleAddSuccess">
       </AdminTable>  
     </template>
     <template #extend>
-      <Modal
-          title=""
-          v-model="formModal">
-          <Form ref="modelForm" :model="modelForm" :label-width="120">
-            <FormItem>
-              <Button type="primary" @click="handleAdd()">提交</Button>
-              <Button @click="handleReset()" style="margin-left: 8px">重置</Button>
-            </FormItem>
-          </Form>
-          <template #footer>
-              <div></div>
-          </template>
-      </Modal>
+      <!--扩展内容，比如扩展按钮弹窗-->
     </template>
   </AdminLayout>
 </template>
@@ -35,6 +24,9 @@ import AdminLayout from '@/components/AdminLayout';
 
 function url(meta,type){
   //console.log(type +":"+ meta.url.baseUrl+meta.url[type])
+  if(meta.url[type]==undefined){
+    return undefined
+  }
   return meta.url.baseUrl+meta.url[type];
 }
 
@@ -61,21 +53,8 @@ export default {
         formMeta:tableMeta.form,
         enable:tableMeta.url.add!=undefined
       },
-      // extendBtns:[{
-      //   name:'extend-one',
-      //   icon:'logo-xbox',
-      //   title:'重置',
-      //   message:'确定要重置吗？'
-      // },{
-      //   name:'extend-two',
-      //   icon:"logo-wordpress",
-      //   title:'license',
-      //   message:'确定要获取license吗？'
-      // }],
       extendBtns:[],
-      menuUrl:layoutMeta.menu,
-      modelForm:{},
-      formModal:false
+      menuUrl:layoutMeta.menu
     };
   },
   methods:{
@@ -85,11 +64,9 @@ export default {
     handleExtendTwo(params){
       
     },
-    handleAdd(){
-
-    },
-    handleReset(){
-      this.$refs.modelForm.resetFields();
+    handleAddSuccess(params){
+      console.log("dddddddddddddddddddddd")
+      this.$Message.info('新增记录成功')
     }
   }
 };

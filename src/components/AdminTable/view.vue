@@ -153,8 +153,9 @@ export default {
     },
     handleModalSuccess(params){
       this.formAdd=false;
-      this.pageInfo.current=params;
+      //this.pageInfo.current=params;
       this.handleSearch(this.pageInfo.params);
+      this.$emit('on-modal-success',params); 
     },
     handleExtendOne(params){
       //console.log(params);

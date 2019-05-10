@@ -12,19 +12,19 @@ export default {
    * @description 默认打开的首页的路由name值，默认为home
    */
   homeUrl: function(){
-    return '/logauth.html';
+    return '/tenantmanager.html';
   },
     /**
    * @description api请求基础路径
    */
   baseUrl: function(){
-    return this.env=='dev'?'http://localhost:8088/rest/':'https://produce.com';
+    return this.env=='dev'?'http://localhost:8099/auth/admin/':'https://produce.com';
   },
 
   /**
    * 是否使用本地模拟数据
    */
-  local:true,
+  local:false,
 
   env:'dev'
 }
