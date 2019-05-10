@@ -5,7 +5,7 @@
               :formMeta="addConfig.formMeta" 
         v-if="addConfig.enable"
         @on-modal-close="formAdd=false" 
-        @on-modal-success="handleSearch" />
+        @on-modal-success="handleModalSuccess" />
     <Card>
       <tables ref="tables" editable searchable :addable="addConfig.enable" search-place="top" v-model="tableData" 
           :columns="columnMeta" 
@@ -94,7 +94,7 @@ export default {
   methods: {
     handleDelete (params) {
       delTableData({
-        requestParams:params,
+        requestParams:params.row,
         requestUrl:this.deleteUrl
       }).then(res=>{
         responseHandle(res,this.$Message);
@@ -139,6 +139,7 @@ export default {
         const obj=this;
         responseHandle(res,this.$Message,function(response){
           obj.tableData=response.content
+          //console.log(obj.tableData)
           if(obj.pageInfo.page){
             obj.pageInfo.total=parseInt(response.totalElements)
             obj.pageInfo.current=parseInt(response.number)+1
@@ -149,6 +150,11 @@ export default {
         console.log(err)
         this.$Message.error('获取记录异常,请核对');
       })
+    },
+    handleModalSuccess(params){
+      this.formAdd=false;
+      this.pageInfo.current=params;
+      this.handleSearch(this.pageInfo.params);
     },
     handleExtendOne(params){
       //console.log(params);
@@ -170,6 +176,7 @@ export default {
     },
     initMeta(){
       const buttons=[];
+      console.log("delete url :"+this.deleteUrl);
       if(this.deleteUrl!=undefined){
         buttons.push(HandleBtns.delete)
       }

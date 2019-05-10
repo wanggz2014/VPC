@@ -2,7 +2,7 @@ import { login, getUserInfo, logout } from '@/api/user'
 import { setToken, getToken,responseHandle } from '@/libs/util'
 import config from '@/config'
 
-const local=config.local();
+const local=config.local;
 
 export default {
   state: {

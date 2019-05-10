@@ -76,7 +76,7 @@ export const getMenuDetail=(menuData) =>{
     const crumb=[menuData[i].subTitle]
     for(let j=0;j<menuData[i].items.length;j++){
       const menu=menuData[i].items[j]
-      if(url.indexOf(menu.url)>-1){
+      if(url.indexOf(menu.url)>-1||menu.url.indexOf(url)>-1){
         //console.log(menu.url)
         crumb.push(menu.title)
         result.breadcrumb=crumb

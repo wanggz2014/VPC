@@ -1,10 +1,7 @@
 <template>
   <div className="log-auth-page">
-    <AdminLayout>
-      <template slot="default">
-        <AdminTable />
-      </template>
-    </AdminLayout>
+
+    <AdminPage :Meta="MetaJson"></AdminPage>
 
     <!-- 重要！！！ temp_placehold请不要移除-->
     <!-- temp_placehold -->
@@ -14,22 +11,19 @@
 <script>
 //重要！！！ import_placehold\comp_placehold 请不要移除
 //import_placehold
-import config from '@/config';
-import AdminLayout from './components/AdminLayout';
-import AdminTable from './components/AdminTable';
+import AdminPage from '@/components/AdminPage';
+import MetaJson from './meta.json';
 
-const baseUrl = config.baseUrl();
 export default {
   name: 'LogAuth',
   components: {
     //comp_placehold
-    AdminLayout,
-    AdminTable,
+    AdminPage
   },
   data: function() {
     return {
-      local: this.$route.params.local,
+      MetaJson:MetaJson
     };
-  },
+  }
 };
 </script>

@@ -14,8 +14,7 @@
     <template #extend>
       <Modal
           title="获取license"
-          v-model="licenseModal"
-          @on-ok="handleLicense">
+          v-model="licenseModal">
           <Form ref="formLicense" :model="formLicense" :label-width="120">
             <FormItem label="MAC地址">
               <Input v-model="formLicense.macAddress" placeholder="请输入mac地址"/>

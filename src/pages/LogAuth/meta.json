@@ -1,0 +1,41 @@
+{
+  "AdminTable":{
+      "columns":[
+        { "title": "姓名", "key": "name", "editable": true ,"searchable":true},
+        { "title": "邮箱", "key": "email", "editable": true ,"searchable":false},
+        { "title": "创建时间", "key": "createTime", "editable": false ,"searchable":false}
+      ],
+      "form":{
+        "items":[
+          {"label":"姓名","prop":"name","placeholder":"请输入名称","type":"input"},
+          {"label":"邮箱","prop":"email","placeholder":"请输入邮箱","type":"input"},
+          {"label":"创建时间","prop":"createTime","placeholder":"请输入创建时间","type":"date"}
+        ],
+        "rules": {
+          "name": [
+              { "required": true, "message": "必须输入姓名", "trigger": "blur" }
+          ],
+          "email": [
+              { "required": true, "message": "必须输入邮箱", "trigger": "blur" },
+              { "type": "email", "message": "邮箱格式有误", "trigger": "blur" }
+          ],
+          "createTime": {
+            "required": true,
+            "message": "创建时间不能为空",
+            "trigger":"change",
+            "type":"date"
+          }
+        }
+      },
+      "url":{
+        "baseUrl":"http://localhost:8088/rest",
+        "search":"/tableSearch",
+        "edit":"/tableEdit",
+        "delete":"/tableDelete",
+        "add":"/tableAdd"
+      }
+  },
+  "AdminLayout":{
+    "menu":"http://localhost:8088/rest/menu"
+  }
+}

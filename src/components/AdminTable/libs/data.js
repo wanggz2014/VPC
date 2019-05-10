@@ -107,7 +107,7 @@ export const responseHandle=(res,message,handle)=>{
   }
   const response=res.data;
   console.log(response)
-  if(response.code!=200||response.data==null){
+  if(response.code!=200){
     message.error(response.message);
     return false;
   }
