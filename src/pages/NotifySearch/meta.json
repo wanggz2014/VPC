@@ -1,0 +1,17 @@
+{
+  "AdminTable":{
+      "columns":[
+        { "title": "Id", "key": "id", "editable": false ,"searchable":false, "maxWidth":100},
+        { "title": "消息类型", "key": "type", "editable": false ,"searchable":false},
+        { "title": "消息内容", "key": "msg", "editable": false ,"searchable":true},
+        { "title": "创建时间", "key": "createTime", "editable": false ,"searchable":false}
+      ],
+      "url":{
+        "baseUrl":"http://localhost:8099/auth/admin",
+        "search":"/notify/list"
+      }
+  },
+  "AdminLayout":{
+    "menu":"http://localhost:8099/auth/admin/base/menus"
+  }
+}
