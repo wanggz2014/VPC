@@ -18,7 +18,7 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: function(){
-    return this.env=='dev'?'http://localhost:8099/auth/admin/':'https://produce.com';
+    return this.env=='dev'?'http://192.168.14.93:8099/auth/admin/':'https://produce.com';
   },
 
   /**

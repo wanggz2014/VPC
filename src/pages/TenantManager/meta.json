@@ -3,7 +3,7 @@
       "columns":[
         { "title": "Id", "key": "id", "editable": true ,"searchable":false, "maxWidth":50},
         { "title": "租户名称", "key": "tenantName", "editable": true ,"searchable":true},
-        { "title": "授权KEY", "key": "apiKey", "editable": false ,"searchable":false},
+        { "title": "授权KEY", "key": "apiKey", "editable": false ,"searchable":true},
         { "title": "过期时间", "key": "expireTime", "editable": true ,"searchable":false},
         { "title": "最近操作时间", "key": "modifyTime", "editable": false ,"searchable":false}
       ],
@@ -27,13 +27,13 @@
         }
       },
       "url":{
-        "baseUrl":"http://localhost:8099/auth/admin",
+        "baseUrl":"http://192.168.14.93:8099/auth/admin",
         "search":"/tenant/list",
         "edit":"/tenant/edit",
         "add":"/tenant/submit"
       }
   },
   "AdminLayout":{
-    "menu":"http://localhost:8099/auth/admin/base/menus"
+    "menu":"http://192.168.14.93:8099/auth/admin/base/menus"
   }
 }

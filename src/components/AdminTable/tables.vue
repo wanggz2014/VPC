@@ -6,7 +6,7 @@
       </Select>
       <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" class="search-input" v-model="searchValue"/>
       <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;搜索</Button>
-      <Button @click="handleAdd" v-if="addable" class="add-btn" type="primary"><Icon type="add"/>&nbsp;&nbsp;添加</Button>
+      <Button @click="handleAdd" v-if="addable" class="search-btn" type="primary"><Icon type="add"/>&nbsp;&nbsp;添加</Button>
     </div>
     <Table
       ref="tablesMain"

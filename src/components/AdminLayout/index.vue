@@ -153,6 +153,9 @@ export default {
   height: 30px;
   background: #5b6270;
   background-image: url('./libs/logo.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  -moz-backface-size:100% 100%;
   border-radius: 3px;
   float: left;
   position: relative;

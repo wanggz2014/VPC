@@ -9,11 +9,11 @@
         { "title": "创建时间", "key": "createTime", "editable": false ,"searchable":false}
       ],
       "url":{
-        "baseUrl":"http://localhost:8099/auth/admin",
+        "baseUrl":"http://192.168.14.93:8099/auth/admin",
         "search":"/log/node/list"
       }
   },
   "AdminLayout":{
-    "menu":"http://localhost:8099/auth/admin/base/menus"
+    "menu":"http://192.168.14.93:8099/auth/admin/base/menus"
   }
 }
