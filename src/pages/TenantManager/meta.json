@@ -27,13 +27,13 @@
         }
       },
       "url":{
-        "baseUrl":"http://192.168.14.93:8099/auth/admin",
+        "baseUrl":"http://center.saas.zjtpyun.com/auth/admin",
         "search":"/tenant/list",
         "edit":"/tenant/edit",
         "add":"/tenant/submit"
       }
   },
   "AdminLayout":{
-    "menu":"http://192.168.14.93:8099/auth/admin/base/menus"
+    "menu":"http://center.saas.zjtpyun.com/auth/admin/base/menus"
   }
 }

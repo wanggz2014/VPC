@@ -19,6 +19,9 @@
           title="获取license"
           v-model="licenseModal">
           <Form ref="formLicense" :model="formLicense" :label-width="120">
+             <FormItem label="授权API" prop="apiKey">
+              <Input v-model="formLicense.apiKey" />
+            </FormItem>
             <FormItem label="MAC地址">
               <Input v-model="formLicense.macAddress" placeholder="请输入mac地址"/>
             </FormItem>
@@ -85,7 +88,8 @@ export default {
       }],
       menuUrl:layoutMeta.menu,
       formLicense:{
-        license:""
+        license:"",
+        apiKey:""
       },
       licenseModal:false
     };
@@ -112,7 +116,10 @@ export default {
       })
     },
     handleExtendTwo(params){
+      //console.log("dfsfsdfsfsdf")
+      //console.log(params)
       this.licenseModal=true
+      this.formLicense.apiKey=params.row.apiKey
     },
     handleAddSuccess(params){
       this.$Modal.success({

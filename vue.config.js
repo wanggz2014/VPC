@@ -41,13 +41,13 @@ let vues = getEntry('./src/pages/*/*.vue');
 
 module.exports = {
   pages:vues,	
-  lintOnSave: false,
+  //lintOnSave: false,
   outputDir: 'build',
   publicPath: './',
   //关闭SourceMap
   productionSourceMap: false,
   runtimeCompiler:true,
-  //filenameHashing: false,
+  filenameHashing: false,
   chainWebpack: (config) => {
     
     //去除代码压缩
